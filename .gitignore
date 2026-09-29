@@ -1,0 +1,25 @@
+# Terraform provider plugins and module cache (downloaded by "terraform init", 100 MB+)
+**/.terraform/
+
+# State files: contain resource IDs, IPs and sometimes secrets
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+
+# Saved plans (binary, can contain values)
+tfplan
+*.tfplan
+
+# Variable values specific to you (your laptop IP, account details)
+terraform.tfvars
+*.auto.tfvars
+
+# Local overrides, logs, CLI config
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+crash.log
+crash.*.log
+.terraformrc
+terraform.rc

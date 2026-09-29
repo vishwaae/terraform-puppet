@@ -1,0 +1,24 @@
+#!/bin/bash
+# cloud-init first boot: install post_script.sh as a systemd unit and start it.
+# No secrets here — only the SSM parameter NAME.
+mkdir -p /etc/puppetlabs
+cat > /etc/puppetlabs/bootstrap.env <<ENV
+SSM_PARAM=${ssm_param}
+AWS_REGION=${aws_region}
+ENV
+echo "${post_script_b64}" | base64 -d > /usr/local/bin/post_script.sh
+chmod 755 /usr/local/bin/post_script.sh
+cat > /etc/systemd/system/post_script.service <<UNIT
+[Unit]
+Description=Zero-touch Puppet bootstrap
+After=network-online.target
+Wants=network-online.target
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/puppetlabs/bootstrap.env
+ExecStart=/usr/local/bin/post_script.sh
+[Install]
+WantedBy=multi-user.target
+UNIT
+systemctl daemon-reload
+systemctl enable --now post_script.service
